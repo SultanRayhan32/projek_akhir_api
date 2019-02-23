@@ -163,9 +163,9 @@ module.exports = {
         var id = req.params.id;
         var sql = `SELECT * from table_konfirmasi where id_users = ${id};`;
         db.query(sql, (err, results) => {
-            if(err) {
-                console.log(err.message)
-            }
+            // if(err) {
+            //     console.log(err.message)
+            // }
     
             if(results.length > 0) {
                 const path = '/struk/images'; //file save path
@@ -173,6 +173,7 @@ module.exports = {
     
                 upload(req, res, (err) => {
                     if(err){
+                        console.log('error di page 176')
                         return res.status(500).json({ message: 'Upload brand picture failed !', error: err.message });
                     }
     
@@ -188,45 +189,91 @@ module.exports = {
                             db.query(sql,data, (err1,results1) => {
                                 if(err1) {
                                     fs.unlinkSync('./public' + imagePath);
+                                    console.log(err1.message + ' error di page 191 ' )
                                     return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
+                                    
                                 }
-                                fs.unlinkSync('./public' + results[0].image);
-                                sql = `Select * from table_konfirmasi;`;
-                                db.query(sql, (err2,results2) => {
-                                    if(err2) {
-                                        return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
-                                    }
-    
-                                    res.send(results2);
-                                })
+                                res.send(results1)
+                                // fs.unlinkSync('./public' + results[0].image);
+                                // sql = `Select * from table_konfirmasi;`;
+                                // db.query(sql, (err2,results2) => {
+                                //     if(err2) {
+                                //         console.log(err2.message + ' ERROR DI PAGE 201 ')
+                                //         return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
+                                //     }
+                                //     res.send(results2)
+                                    
+                                    
+                                // })
                             })
                         }
-                        else {
-                            sql = `Update table_konfirmasi 
-                                    set 
-                                    status ='${data.status}'
-                                    where id_users = ${id};`
-                            db.query(sql, (err1,results1) => {
-                                if(err1) {
-                                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
-                                }
-                                sql = `Select * from table_konfirmasi;`;
-                                db.query(sql, (err2,results2) => {
-                                    if(err2) {
-                                        return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
-                                    }
+                        // else {
+                        //     sql = `Update table_konfirmasi 
+                        //             set 
+                        //             status ='${data.status}'
+                        //             where id_users = ${id};`
+                        //     db.query(sql, (err1,results1) => {
+                        //         if(err1) {
+                        //             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
+                        //         }
+                        //         sql = `Select * from table_konfirmasi;`;
+                        //         db.query(sql, (err2,results2) => {
+                        //             if(err2) {
+                        //                 console.log('error di page 222')
+                        //                 return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err1.message });
+                        //             }
     
-                                    res.send(results2);
-                                })
-                            })
-                        }
+                        //             res.send(results2);
+                        //         })
+                        //     })
+                        // }
                     }
                     catch(err){
-                        console.log(err.message)
+                        console.log(err.message + '  errro di page 230')
                         return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
                     }
                 })
             }
         })
+    },
+    editCartqty : (req,res) =>{
+        var idUser = req.body.idUser;
+        var idProduk = req.body.idProduk;
+        var newQty = req.body.qty;
+        var totalHarga = req.body.totalharga
+        var sql = `UPDATE cart SET qty = ${newQty} , totalharga = ${totalHarga}
+                WHERE idProduk = ${idProduk} AND idUsers = ${idUser};`
+        db.query(sql , (err, results)=>{
+            if(err){
+                console.log(err.message)
+                console.log('error cuy')
+            }
+            res.send(results);
+            console.log(results)
+        })
+    },
+    getCartAndProduk : (req, res) =>{
+        var idProduk = req.query.idProduk;
+        var idUser = req.query.idUser;
+        var sql = `SELECT * FROM cart 
+                    JOIN produk_table ON
+                    cart.idProduk = produk_table.id
+                    WHERE cart.idProduk = ${idProduk} AND cart.idUsers = ${idUser};`;
+        db.query(sql , (err, results)=>{
+           res.send(results);
+           console.log(results)
+        })
+    },
+    deleteCart : (req, res) =>{
+        var idUsers = req.query.idUser;
+        var idProduk = req.query.idProduk;
+        var sql = `DELETE cart FROM cart WHERE idUsers = ${idUsers} AND idProduk = ${idProduk};`;
+        db.query(sql,(err, results)=>{
+            if(err){
+                console.log(err.message)
+            }
+            res.send(results)
+        })
+       
     }
 }

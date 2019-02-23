@@ -220,7 +220,24 @@ module.exports = {
             res.send(results)
             console.log('berhasi di cancel dan hapus')
         })
+    },
+    deleteUser : (req,res) =>{
+        var idUser = req.query.id;
+        var sql = `DELETE FROM users WHERE id = ${idUser};` ;
+        db.query(sql , (err, results)=>{
+            if(err){
+                console.log(err.message)
+            }
+            console.log(results)
+            res.send(results)
+        })
+    },
+    filterProduk : (req, res) =>{
+        var filter = req.query.nama;
+        var sql = `SELECT * FROM produk_table WHERE nama like '%${filter}%';`;
+        db.query(sql,(err, results)=>{
+            res.send(results);
+        })
     }
-   
 
 }

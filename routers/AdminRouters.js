@@ -10,5 +10,7 @@ router.get('/konfirmasi' , AdminControllers.selectKonfirm);
 router.post('/konfirmasiadmin' , AdminControllers.konfirmasi);
 router.get('/getkonfimasi' , AdminControllers.selectAllKonfirm);
 router.delete('/cancelkonfirmasi' , AdminControllers.cancelDelete);
+router.delete('/deletuser' , AdminControllers.deleteUser);
+router.get('/filterproduk' , AdminControllers.filterProduk)
 
 module.exports = router; 

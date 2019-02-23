@@ -29,13 +29,15 @@ app.use(bodyParser.json())
 app.use(express.static('public'))
 
 const {
-    authrouter , ProdukRouters , CartRouters , AdminRouters
+    authrouter , ProdukRouters , CartRouters , AdminRouters , TransaksiRouters , KategoriMerkRouters
 } = require('./routers')
 
 app.use('/auth' , authrouter);
 app.use('/produk' , ProdukRouters);
 app.use('/cart' , CartRouters );
-app.use('/admin' , AdminRouters)
+app.use('/admin' , AdminRouters);
+app.use('/trx' , TransaksiRouters);
+app.use('/kategori' ,KategoriMerkRouters )
 
 app.post('/addbrand', (req,res) => {
     try {

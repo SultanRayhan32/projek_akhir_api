@@ -102,6 +102,13 @@ module.exports = {
         db.query(sql , (err ,results)=>{
             console.log(results)
         })
+    },
+    PaginationProduk : (req, res) =>{
+        var awal = req.query.awal;
+        var sql = `SELECT * FROM produk_table LIMIT ${awal} , 6;`;
+        db.query(sql , (err, results)=>{
+            res.send(results)
+        })
     }
    
 }

@@ -12,5 +12,8 @@ router.get('/getcartproduk' , CartControllers.getCartProduk)
 router.post('/checkout2' , CartControllers.checkOut2);
 router.delete('/checkout3' , CartControllers.checkOut3);
 router.put('/kirimstruk/:id' , CartControllers.uploadStruk);
+router.post('/editcartqty' , CartControllers.editCartqty);
+router.get('/getcartandproduk' , CartControllers.getCartAndProduk)
+router.delete('/deletecart' , CartControllers.deleteCart)
 
 module.exports = router;
